@@ -60,6 +60,59 @@ ga('send', 'pageview');
   </div>
 </header>
     <section id="main" class="outer">
+      <article id="post-set-up-shadowsocks-services-autostart" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/09/set-up-shadowsocks-services-autostart/">配置 shadowsocks 服务自启动</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/12/09/set-up-shadowsocks-services-autostart/" class="article-date">
+  <time datetime="2016-12-09T15:58:53.000Z" itemprop="datePublished">2016-12-09</time>
+</a>
+      
+      
+        <div class="article-comment-link-wrap">
+          <a href="https://louis-zhou.github.io/2016/12/09/set-up-shadowsocks-services-autostart/#ds-thread" class="article-comment-link">评论</a>
+        </div>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>创建自启动脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi /etc/init.d/ssserverd</div></pre></td></tr></table></figure>
+<p>输入下面脚本内容并保存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">#!/bin/bash</div><div class="line"></div><div class="line"># 配置文件路径</div><div class="line">config_path=&quot;/home/shadowsocks/config.json&quot;</div><div class="line"></div><div class="line">ssserver=$&#123;ssserver:-/usr/local/python27/bin/ssserver&#125;</div><div class="line"></div><div class="line">start() &#123;</div><div class="line">        $ssserver -c $config_path -d start</div><div class="line">&#125;</div><div class="line">stop() &#123;</div><div class="line">        $ssserver -c $config_path -d stop</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">case &quot;$1&quot; in</div><div class="line">        start)</div><div class="line">                start</div><div class="line">        ;;</div><div class="line">        stop)</div><div class="line">                stop</div><div class="line">        ;;</div><div class="line">esac</div></pre></td></tr></table></figure></p>
+<p>授权脚本可执行权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chmod +x /etc/rc.d/init.d/ssserverd</div></pre></td></tr></table></figure>
+<p>创建软链到系统启动级别下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ln -sf /etc/init.d/ssserverd /etc/rc3.d/S20ssserverd</div><div class="line">ln -sf /etc/init.d/ssserverd /etc/rc3.d/K20ssserverd</div></pre></td></tr></table></figure>
+<p>ok，重启机器试试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">reboot</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+    
       <article id="post-set-up-shadowsocks-services" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     

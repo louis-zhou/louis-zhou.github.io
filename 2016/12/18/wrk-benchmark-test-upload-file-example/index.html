@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>wrk 测试 文件上传例子 - Louis Zhou Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="编写lua脚本 benchmark.lua1234567891011121314151617181920212223242526272829303132333435363738394041424344package.cpath = &amp;apos;/usr/local/openresty/lualib/?.so;&amp;apos; .. package.cpathpackage.path = &amp;apos;/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="wrk 测试 文件上传例子">
+<meta property="og:url" content="https://louis-zhou.github.io/2016/12/18/wrk-benchmark-test-upload-file-example/index.html">
+<meta property="og:site_name" content="Louis Zhou Blog">
+<meta property="og:description" content="编写lua脚本 benchmark.lua1234567891011121314151617181920212223242526272829303132333435363738394041424344package.cpath = &amp;apos;/usr/local/openresty/lualib/?.so;&amp;apos; .. package.cpathpackage.path = &amp;apos;/">
+<meta property="og:updated_time" content="2016-12-17T17:36:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="wrk 测试 文件上传例子">
+<meta name="twitter:description" content="编写lua脚本 benchmark.lua1234567891011121314151617181920212223242526272829303132333435363738394041424344package.cpath = &amp;apos;/usr/local/openresty/lualib/?.so;&amp;apos; .. package.cpathpackage.path = &amp;apos;/">
+  
+  
+    <link rel="icon" href="/logo.png">
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-85765869-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://louis-zhou.github.io"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-wrk-benchmark-test-upload-file-example" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      wrk 测试 文件上传例子
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/12/18/wrk-benchmark-test-upload-file-example/" class="article-date">
+  <time datetime="2016-12-17T17:27:44.000Z" itemprop="datePublished">2016-12-18</time>
+</a>
+      
+      
+        <div class="article-comment-link-wrap">
+          <a href="https://louis-zhou.github.io/2016/12/18/wrk-benchmark-test-upload-file-example/#ds-thread" class="article-comment-link">评论</a>
+        </div>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="编写lua脚本-benchmark-lua"><a href="#编写lua脚本-benchmark-lua" class="headerlink" title="编写lua脚本 benchmark.lua"></a>编写lua脚本 benchmark.lua</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">package.cpath = &apos;/usr/local/openresty/lualib/?.so;&apos; .. package.cpath</div><div class="line">package.path = &apos;/usr/local/openresty/lualib/?.lua;&apos; .. package.path</div><div class="line"></div><div class="line">cjson = require &quot;cjson&quot;</div><div class="line"></div><div class="line">wrk.method = &quot;POST&quot;</div><div class="line">wrk.headers[&quot;Content-Type&quot;] = &quot;multipart/form-data; boundary=----WebKitFormBoundaryX3bY6PBMcxB1vCan&quot;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">bodyhead = &quot;------WebKitFormBoundaryX3bY6PBMcxB1vCan&quot;</div><div class="line">bodyhead = bodyhead .. &apos;\r\n&apos;</div><div class="line">bodyhead = bodyhead .. [[Content-Disposition: form-data; name=&quot;fileName1&quot;; filename=&quot;手机端男长袖_04.jpg&quot;]]</div><div class="line">bodyhead = bodyhead .. &apos;\r\n&apos;</div><div class="line">bodyhead = bodyhead .. &apos;Content-Type: image/jpeg&apos;</div><div class="line">bodyhead = bodyhead .. &apos;\r\n&apos;</div><div class="line">bodyhead = bodyhead .. &apos;\r\n&apos;</div><div class="line"></div><div class="line">file = io.open(&apos;/Users/louis/Desktop/手机端男长袖_04.jpg&apos;,&quot;rb&quot;)</div><div class="line">bodyhead = bodyhead .. file:read(&quot;*a&quot;)</div><div class="line"></div><div class="line"></div><div class="line">bodyhead = bodyhead .. &apos;\r\n&apos;</div><div class="line">bodyhead = bodyhead .. &apos;------WebKitFormBoundaryX3bY6PBMcxB1vCan--&apos;</div><div class="line"></div><div class="line">wrk.body   = bodyhead</div><div class="line"></div><div class="line">io.close(file)</div><div class="line"></div><div class="line">-- done = function(summary, latency, requests)</div><div class="line">--    io.write(&quot;------------------------------\n&quot;)</div><div class="line">  </div><div class="line">--    print(cjson.encode(summary))</div><div class="line">--    print(cjson.encode(latency))</div><div class="line">--    print(cjson.encode(requests))</div><div class="line">--    -- for _, p in pairs(&#123; 50, 90, 99, 99.999 &#125;) do</div><div class="line">--    --    n = latency:percentile(p)</div><div class="line">--    --    io.write(string.format(&quot;%g%%,%d\n&quot;, p, n))</div><div class="line">--    -- end</div><div class="line">-- end</div><div class="line"></div><div class="line">-- response = function(status, headers, body)</div><div class="line">--     print(body) </div><div class="line">-- end</div></pre></td></tr></table></figure>
+<h4 id="wrk-运行"><a href="#wrk-运行" class="headerlink" title="wrk 运行"></a>wrk 运行</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wrk -t12 -c100 -d600s -T30s --latency -s benchmark.lua http://10.185.240.111:8888/imgextra</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/12/09/set-up-shadowsocks-services-autostart/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">配置 shadowsocks 服务自启动&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+
+
+
+
+<section id="comments">
+  <!-- 多说评论框 start -->
+  <div class="ds-thread" data-thread-key="post-wrk-benchmark-test-upload-file-example" data-title="wrk 测试 文件上传例子" data-url="https://louis-zhou.github.io/2016/12/18/wrk-benchmark-test-upload-file-example/"></div>
+  <!-- 多说评论框 end -->
+  <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:'louis-zhou'};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+       || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+  <!-- 多说公共JS代码 end -->
+</section>
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Louis Zhou&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>

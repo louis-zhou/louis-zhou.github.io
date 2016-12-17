@@ -60,6 +60,52 @@ ga('send', 'pageview');
   </div>
 </header>
     <section id="main" class="outer">
+      <article id="post-wrk-benchmark-test-upload-file-example" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/18/wrk-benchmark-test-upload-file-example/">wrk 测试 文件上传例子</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/12/18/wrk-benchmark-test-upload-file-example/" class="article-date">
+  <time datetime="2016-12-17T17:27:44.000Z" itemprop="datePublished">2016-12-18</time>
+</a>
+      
+      
+        <div class="article-comment-link-wrap">
+          <a href="https://louis-zhou.github.io/2016/12/18/wrk-benchmark-test-upload-file-example/#ds-thread" class="article-comment-link">评论</a>
+        </div>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="编写lua脚本-benchmark-lua"><a href="#编写lua脚本-benchmark-lua" class="headerlink" title="编写lua脚本 benchmark.lua"></a>编写lua脚本 benchmark.lua</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">package.cpath = &apos;/usr/local/openresty/lualib/?.so;&apos; .. package.cpath</div><div class="line">package.path = &apos;/usr/local/openresty/lualib/?.lua;&apos; .. package.path</div><div class="line"></div><div class="line">cjson = require &quot;cjson&quot;</div><div class="line"></div><div class="line">wrk.method = &quot;POST&quot;</div><div class="line">wrk.headers[&quot;Content-Type&quot;] = &quot;multipart/form-data; boundary=----WebKitFormBoundaryX3bY6PBMcxB1vCan&quot;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">bodyhead = &quot;------WebKitFormBoundaryX3bY6PBMcxB1vCan&quot;</div><div class="line">bodyhead = bodyhead .. &apos;\r\n&apos;</div><div class="line">bodyhead = bodyhead .. [[Content-Disposition: form-data; name=&quot;fileName1&quot;; filename=&quot;手机端男长袖_04.jpg&quot;]]</div><div class="line">bodyhead = bodyhead .. &apos;\r\n&apos;</div><div class="line">bodyhead = bodyhead .. &apos;Content-Type: image/jpeg&apos;</div><div class="line">bodyhead = bodyhead .. &apos;\r\n&apos;</div><div class="line">bodyhead = bodyhead .. &apos;\r\n&apos;</div><div class="line"></div><div class="line">file = io.open(&apos;/Users/louis/Desktop/手机端男长袖_04.jpg&apos;,&quot;rb&quot;)</div><div class="line">bodyhead = bodyhead .. file:read(&quot;*a&quot;)</div><div class="line"></div><div class="line"></div><div class="line">bodyhead = bodyhead .. &apos;\r\n&apos;</div><div class="line">bodyhead = bodyhead .. &apos;------WebKitFormBoundaryX3bY6PBMcxB1vCan--&apos;</div><div class="line"></div><div class="line">wrk.body   = bodyhead</div><div class="line"></div><div class="line">io.close(file)</div><div class="line"></div><div class="line">-- done = function(summary, latency, requests)</div><div class="line">--    io.write(&quot;------------------------------\n&quot;)</div><div class="line">  </div><div class="line">--    print(cjson.encode(summary))</div><div class="line">--    print(cjson.encode(latency))</div><div class="line">--    print(cjson.encode(requests))</div><div class="line">--    -- for _, p in pairs(&#123; 50, 90, 99, 99.999 &#125;) do</div><div class="line">--    --    n = latency:percentile(p)</div><div class="line">--    --    io.write(string.format(&quot;%g%%,%d\n&quot;, p, n))</div><div class="line">--    -- end</div><div class="line">-- end</div><div class="line"></div><div class="line">-- response = function(status, headers, body)</div><div class="line">--     print(body) </div><div class="line">-- end</div></pre></td></tr></table></figure>
+<h4 id="wrk-运行"><a href="#wrk-运行" class="headerlink" title="wrk 运行"></a>wrk 运行</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wrk -t12 -c100 -d600s -T30s --latency -s benchmark.lua http://10.185.240.111:8888/imgextra</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+    
       <article id="post-set-up-shadowsocks-services-autostart" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     

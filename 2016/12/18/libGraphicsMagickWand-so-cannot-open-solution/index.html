@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>libGraphicsMagickWand.so:cannot open shared object file 问题处理 - Louis Zhou Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="GraphicsMagick lua库https://github.com/clementfarabet/graphicsmagick
+GraphicsMagick lua库安装后,lua文件中引入 require ‘graphicsmagick’ 报错123456789.../openresty/luajit/share/lua/5.1/graphicsmagick/Image.lua:329:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="libGraphicsMagickWand.so:cannot open shared object file 问题处理">
+<meta property="og:url" content="https://louis-zhou.github.io/2016/12/18/libGraphicsMagickWand-so-cannot-open-solution/index.html">
+<meta property="og:site_name" content="Louis Zhou Blog">
+<meta property="og:description" content="GraphicsMagick lua库https://github.com/clementfarabet/graphicsmagick
+GraphicsMagick lua库安装后,lua文件中引入 require ‘graphicsmagick’ 报错123456789.../openresty/luajit/share/lua/5.1/graphicsmagick/Image.lua:329:">
+<meta property="og:updated_time" content="2016-12-18T13:08:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="libGraphicsMagickWand.so:cannot open shared object file 问题处理">
+<meta name="twitter:description" content="GraphicsMagick lua库https://github.com/clementfarabet/graphicsmagick
+GraphicsMagick lua库安装后,lua文件中引入 require ‘graphicsmagick’ 报错123456789.../openresty/luajit/share/lua/5.1/graphicsmagick/Image.lua:329:">
+  
+  
+    <link rel="icon" href="/logo.png">
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-85765869-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://louis-zhou.github.io"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-libGraphicsMagickWand-so-cannot-open-solution" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      libGraphicsMagickWand.so:cannot open shared object file 问题处理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/12/18/libGraphicsMagickWand-so-cannot-open-solution/" class="article-date">
+  <time datetime="2016-12-18T13:00:28.000Z" itemprop="datePublished">2016-12-18</time>
+</a>
+      
+      
+        <div class="article-comment-link-wrap">
+          <a href="https://louis-zhou.github.io/2016/12/18/libGraphicsMagickWand-so-cannot-open-solution/#ds-thread" class="article-comment-link">评论</a>
+        </div>
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="GraphicsMagick-lua库"><a href="#GraphicsMagick-lua库" class="headerlink" title="GraphicsMagick lua库"></a>GraphicsMagick lua库</h5><p><a href="https://github.com/clementfarabet/graphicsmagick" target="_blank" rel="external">https://github.com/clementfarabet/graphicsmagick</a></p>
+<h5 id="GraphicsMagick-lua库安装后-lua文件中引入-require-‘graphicsmagick’-报错"><a href="#GraphicsMagick-lua库安装后-lua文件中引入-require-‘graphicsmagick’-报错" class="headerlink" title="GraphicsMagick lua库安装后,lua文件中引入 require ‘graphicsmagick’ 报错"></a>GraphicsMagick lua库安装后,lua文件中引入 require ‘graphicsmagick’ 报错</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">.../openresty/luajit/share/lua/5.1/graphicsmagick/Image.lua:329: libGraphicsMagickWand.so: cannot open shared object file: No such file or directory</div><div class="line">stack traceback:</div><div class="line">        [C]: in function &apos;load&apos;</div><div class="line">        .../openresty/luajit/share/lua/5.1/graphicsmagick/Image.lua:329: in main chunk</div><div class="line">        [C]: in function &apos;require&apos;</div><div class="line">        ...l/openresty/luajit/share/lua/5.1/graphicsmagick/init.lua:2: in main chunk</div><div class="line">        [C]: in function &apos;require&apos;</div><div class="line">        stdin:1: in main chunk</div><div class="line">        [C]: at 0x004046d0</div></pre></td></tr></table></figure>
+<p>原因是:libGraphicsMagickWand.so 动态库未找到.<br>在安装graphicsmagick时,libGraphicsMagickWand.so等动态库文件被安装在<br>/usr/local/lib下，/usr/local/lib目录未被链接上</p>
+<h5 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法:"></a>解决方法:</h5><p>将 /usr/local/lib 目录添加到 ld.so.conf 文件中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">vi /etc/ld.so.conf</div><div class="line"></div><div class="line">#文件内容如下</div><div class="line">include ld.so.conf.d/*.conf</div><div class="line">/usr/local/lib</div></pre></td></tr></table></figure></p>
+<p>保存后执行ldconfig 重新链接动态库即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ldconfig</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/12/18/wrk-benchmark-test-upload-file-example/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">wrk 测试 文件上传例子&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+
+
+
+
+<section id="comments">
+  <!-- 多说评论框 start -->
+  <div class="ds-thread" data-thread-key="post-libGraphicsMagickWand-so-cannot-open-solution" data-title="libGraphicsMagickWand.so:cannot open shared object file 问题处理" data-url="https://louis-zhou.github.io/2016/12/18/libGraphicsMagickWand-so-cannot-open-solution/"></div>
+  <!-- 多说评论框 end -->
+  <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:'louis-zhou'};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0] 
+       || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+  <!-- 多说公共JS代码 end -->
+</section>
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Louis Zhou&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>
